@@ -1,0 +1,12 @@
+# Protect uploads directory - prevent direct PHP execution
+<FilesMatch "\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Allow only PDF files to be served
+<FilesMatch "\.pdf$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>
+
