@@ -18,10 +18,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Dark mode toggle
     const darkModeToggle = document.querySelector('.dark-mode-toggle');
-    if (darkModeToggle) {
+    const darkModeIcon = document.querySelector('.dark-mode-icon');
+    
+    // Restore dark mode state from localStorage
+    const savedDarkMode = localStorage.getItem('darkMode');
+    if (savedDarkMode === 'true') {
+        document.documentElement.classList.add('dark-mode');
+        if (darkModeIcon) {
+            darkModeIcon.textContent = '☀️';
+        }
+    }
+    
+    if (darkModeToggle && darkModeIcon) {
         darkModeToggle.addEventListener('click', function() {
             const isDark = document.documentElement.classList.toggle('dark-mode');
             localStorage.setItem('darkMode', isDark);
+            
+            // Update icon
+            if (isDark) {
+                darkModeIcon.textContent = '☀️';
+            } else {
+                darkModeIcon.textContent = '🌙';
+            }
         });
     }
     

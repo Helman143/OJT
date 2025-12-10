@@ -230,11 +230,9 @@ closeDBConnection($conn);
                 <span>Create New Job Posting</span>
             </a>
             <a href="applications/index.php" class="btn btn-secondary btn-action-secondary">
-                <span class="btn-icon">📋</span>
                 <span>View All Applications</span>
             </a>
             <a href="jobs/index.php" class="btn btn-secondary btn-action-secondary">
-                <span class="btn-icon">💼</span>
                 <span>Manage Job Postings</span>
             </a>
         </div>
