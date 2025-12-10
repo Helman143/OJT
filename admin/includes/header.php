@@ -35,8 +35,37 @@ if (strpos($script_path, '/admin/applications/') !== false ||
             <a href="<?php echo $admin_base; ?>jobs/index.php">Job Postings</a>
             <a href="<?php echo $admin_base; ?>applications/index.php">Applications</a>
             <div class="user-menu">
-                <span><?php echo htmlspecialchars($_SESSION['admin_name']); ?></span>
-                <a href="<?php echo $admin_base; ?>logout.php" class="btn btn-sm btn-danger">Logout</a>
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">
+                    <span class="dark-mode-icon">🌙</span>
+                </button>
+                <div class="profile-dropdown">
+                    <button class="profile-trigger" aria-label="Profile menu" aria-expanded="false">
+                        <div class="profile-avatar">
+                            <span><?php echo strtoupper(substr($_SESSION['admin_name'], 0, 1)); ?></span>
+                        </div>
+                        <span class="profile-name"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></span>
+                        <span class="profile-arrow">▼</span>
+                    </button>
+                    <div class="profile-dropdown-menu">
+                        <a href="<?php echo $admin_base; ?>dashboard.php" class="profile-menu-item">
+                            <span class="menu-icon">🏠</span>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#" class="profile-menu-item">
+                            <span class="menu-icon">⚙️</span>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="profile-menu-item">
+                            <span class="menu-icon">👤</span>
+                            <span>Profile</span>
+                        </a>
+                        <div class="profile-menu-divider"></div>
+                        <a href="<?php echo $admin_base; ?>logout.php" class="profile-menu-item profile-menu-logout">
+                            <span class="menu-icon">🚪</span>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
     </div>
