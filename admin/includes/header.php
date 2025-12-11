@@ -33,7 +33,7 @@ if (strpos($script_path, '/admin/applications/') !== false ||
         <nav class="admin-nav">
             <a href="<?php echo $admin_base; ?>dashboard.php">Dashboard</a>
             <a href="<?php echo $admin_base; ?>jobs/index.php">Job Postings</a>
-            <a href="<?php echo $admin_base; ?>applications/index.php">Applications</a>
+            <a href="<?php echo $admin_base; ?>applications/index.php">Applicants</a>
             <div class="user-menu">
                 <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">
                     <span class="dark-mode-icon">🌙</span>

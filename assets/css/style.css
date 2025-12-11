@@ -146,8 +146,7 @@ body::before {
     opacity: 0.9;
 }
 
-.public-header nav a::after,
-.admin-nav a::after {
+.public-header nav a::after {
     content: '';
     position: absolute;
     left: 0;
@@ -158,7 +157,21 @@ body::before {
     transition: width 0.25s ease;
 }
 
-.public-header nav a:hover::after,
+.admin-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -20px;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: width 0.25s ease;
+}
+
+.public-header nav a:hover::after {
+    width: 100%;
+}
+
 .admin-nav a:hover::after {
     width: 100%;
 }
@@ -263,6 +276,7 @@ body::before {
     font-weight: 500;
     text-transform: uppercase;
     transition: color 0.2s;
+    position: relative;
 }
 
 .admin-nav a:hover {
@@ -1087,13 +1101,10 @@ body::before {
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* Key: This cuts off the large icon */
     transition: all 0.3s ease;
 }
 
@@ -1117,6 +1128,12 @@ body::before {
     background: rgba(255, 255, 255, 0.75);
 }
 
+/* Card content wrapper - ensures text is above watermark */
+.card-content {
+    position: relative;
+    z-index: 10; /* Ensures text is always visible above the icon */
+}
+
 .stat-card > * {
     position: relative;
     z-index: 1;
@@ -1126,17 +1143,38 @@ body::before {
     border: none;
 }
 
-.stat-icon {
-    font-size: 2.5rem;
+/* Watermark icon wrapper - oversized, semi-transparent, clipped */
+.icon-watermark {
+    position: absolute;
+    /* Position it to the bottom right */
+    right: -20px;   /* Pull it slightly off the right edge */
+    bottom: -20px;  /* Pull it slightly off the bottom edge */
+    
+    /* Make it HUGE */
+    width: 120px;   
+    height: 120px;
+    
+    /* Styling */
+    opacity: 0.8;   /* 80% opacity */
+    z-index: 0;     /* Sit behind the text */
+    color: #334EAC; /* Primary blue color */
+    
+    /* Optional: Prevent it from blocking clicks on the card */
+    pointer-events: none;
+    
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.stat-icon img {
-    height: 48px;
-    width: 48px;
+/* Ensure the image inside fills the wrapper */
+.icon-watermark img {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+    /* Filter to change SVG color to #334EAC (RGB: 51, 78, 172) */
+    filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(210deg) brightness(95%) contrast(89%);
+    opacity: inherit; /* Inherit the 0.8 opacity from parent */
 }
 
 .stat-info h3 {
@@ -2468,6 +2506,15 @@ body::before {
 
 .quick-stat-icon {
     font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-stat-icon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }
 
 .quick-stat-text {

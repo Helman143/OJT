@@ -107,31 +107,6 @@ if (!empty($job_params)) {
     $recent_jobs = $conn->query($job_query)->fetch_all(MYSQLI_ASSOC);
 }
 
-// Get recent activity (simulated - in real app, you'd have an activity log table)
-$recent_activity = [];
-if (!empty($recent_applications)) {
-    foreach (array_slice($recent_applications, 0, 3) as $app) {
-        $recent_activity[] = [
-            'type' => 'application',
-            'message' => "New application from " . htmlspecialchars($app['full_name']) . " for " . htmlspecialchars($app['position_title']),
-            'time' => $app['submitted_at']
-        ];
-    }
-}
-if (!empty($recent_jobs)) {
-    foreach (array_slice($recent_jobs, 0, 2) as $job) {
-        $recent_activity[] = [
-            'type' => 'job',
-            'message' => "Job posted: " . htmlspecialchars($job['position_title']),
-            'time' => $job['created_at']
-        ];
-    }
-}
-usort($recent_activity, function($a, $b) {
-    return strtotime($b['time']) - strtotime($a['time']);
-});
-$recent_activity = array_slice($recent_activity, 0, 5);
-
 closeDBConnection($conn);
 ?>
 <!DOCTYPE html>
@@ -166,15 +141,21 @@ closeDBConnection($conn);
         <div class="quick-stats-bar">
             <div class="quick-stats-content">
                 <div class="quick-stat-item">
-                    <span class="quick-stat-icon">📅</span>
+                    <span class="quick-stat-icon">
+                        <img src="../assets/images/calendar.svg" alt="Calendar">
+                    </span>
                     <span class="quick-stat-text"><?php echo date('l, F j, Y'); ?></span>
                 </div>
                 <div class="quick-stat-item">
-                    <span class="quick-stat-icon">📊</span>
-                    <span class="quick-stat-text"><?php echo $stats['new_applications_week']; ?> New Applications This Week</span>
+                    <span class="quick-stat-icon">
+                        <img src="../assets/images/graph.svg" alt="Graph">
+                    </span>
+                    <span class="quick-stat-text"><?php echo $stats['new_applications_week']; ?> New Applicants This Week</span>
                 </div>
                 <div class="quick-stat-item">
-                    <span class="quick-stat-icon">⚠️</span>
+                    <span class="quick-stat-icon">
+                        <img src="../assets/images/warning.svg" alt="Warning">
+                    </span>
                     <span class="quick-stat-text"><?php echo count($deadline_alerts); ?> Jobs Approaching Deadline</span>
                 </div>
             </div>
@@ -183,42 +164,50 @@ closeDBConnection($conn);
         <!-- Statistics Cards -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">
+                <div class="card-content">
+                    <div class="stat-info">
+                        <h3><?php echo $stats['total_jobs']; ?></h3>
+                        <p>Total Job Postings</p>
+                    </div>
+                </div>
+                <div class="icon-watermark">
                     <img src="../assets/images/total-job-posting.svg" alt="Total Job Posting">
                 </div>
-                <div class="stat-info">
-                    <h3><?php echo $stats['total_jobs']; ?></h3>
-                    <p>Total Job Postings</p>
-                </div>
             </div>
             
             <div class="stat-card">
-                <div class="stat-icon">
+                <div class="card-content">
+                    <div class="stat-info">
+                        <h3><?php echo $stats['open_jobs']; ?></h3>
+                        <p>Open Positions</p>
+                    </div>
+                </div>
+                <div class="icon-watermark">
                     <img src="../assets/images/open-position.svg" alt="Open Positions">
                 </div>
-                <div class="stat-info">
-                    <h3><?php echo $stats['open_jobs']; ?></h3>
-                    <p>Open Positions</p>
-                </div>
             </div>
             
             <div class="stat-card">
-                <div class="stat-icon">
-                    <img src="../assets/images/total-application.svg" alt="Total Applications">
+                <div class="card-content">
+                    <div class="stat-info">
+                        <h3><?php echo $stats['total_applications']; ?></h3>
+                        <p>Total Applicants</p>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3><?php echo $stats['total_applications']; ?></h3>
-                    <p>Total Applications</p>
+                <div class="icon-watermark">
+                    <img src="../assets/images/total-application.svg" alt="Total Applicants">
                 </div>
             </div>
             
             <div class="stat-card stat-card-highlight">
-                <div class="stat-icon">
-                    <img src="../assets/images/unread-applications.svg" alt="Unread Applications">
+                <div class="card-content">
+                    <div class="stat-info">
+                        <h3><?php echo $stats['unread_applications']; ?></h3>
+                        <p>Unread Applicants</p>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3><?php echo $stats['unread_applications']; ?></h3>
-                    <p>Unread Applications</p>
+                <div class="icon-watermark">
+                    <img src="../assets/images/unread-applications.svg" alt="Unread Applicants">
                 </div>
             </div>
         </div>
@@ -230,7 +219,7 @@ closeDBConnection($conn);
                 <span>Create New Job Posting</span>
             </a>
             <a href="applications/index.php" class="btn btn-secondary btn-action-secondary">
-                <span>View All Applications</span>
+                <span>View All Applicants</span>
             </a>
             <a href="jobs/index.php" class="btn btn-secondary btn-action-secondary">
                 <span>Manage Job Postings</span>
@@ -269,14 +258,14 @@ closeDBConnection($conn);
             <h2>📈 Analytics Overview</h2>
             <div class="analytics-grid">
                 <div class="analytics-card">
-                    <div class="analytics-label">Applications This Month</div>
+                    <div class="analytics-label">Applicants This Month</div>
                     <div class="analytics-value"><?php echo $stats['applications_this_month']; ?></div>
                     <div class="analytics-change">+<?php echo $stats['new_applications_week']; ?> this week</div>
                 </div>
                 <div class="analytics-card">
                     <div class="analytics-label">Most Applied Position</div>
                     <div class="analytics-value"><?php echo htmlspecialchars($most_applied['position_title'] ?? 'N/A'); ?></div>
-                    <div class="analytics-change"><?php echo $most_applied['app_count'] ?? 0; ?> applications</div>
+                    <div class="analytics-change"><?php echo $most_applied['app_count'] ?? 0; ?> applicants</div>
                 </div>
                 <div class="analytics-card">
                     <div class="analytics-label">Open Positions</div>
@@ -286,46 +275,13 @@ closeDBConnection($conn);
             </div>
         </div>
         
-        <!-- Recent Activity Log -->
-        <div class="dashboard-section activity-section">
-            <h2>📝 Recent Activity</h2>
-            <div class="activity-list">
-                <?php if (empty($recent_activity)): ?>
-                    <div class="activity-item">
-                        <p class="text-muted">No recent activity</p>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($recent_activity as $activity): ?>
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <?php echo $activity['type'] == 'application' ? '📄' : '💼'; ?>
-                            </div>
-                            <div class="activity-content">
-                                <p class="activity-message"><?php echo $activity['message']; ?></p>
-                                <span class="activity-time"><?php 
-                                    $time_diff = time() - strtotime($activity['time']);
-                                    if ($time_diff < 3600) {
-                                        echo floor($time_diff / 60) . ' minutes ago';
-                                    } elseif ($time_diff < 86400) {
-                                        echo floor($time_diff / 3600) . ' hours ago';
-                                    } else {
-                                        echo floor($time_diff / 86400) . ' days ago';
-                                    }
-                                ?></span>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-        
         <!-- Recent Applications -->
         <div class="dashboard-section">
             <div class="section-header">
-                <h2>Recent Applications</h2>
+                <h2>Recent Applicants</h2>
                 <div class="section-filters">
                     <form method="GET" class="inline-form">
-                        <input type="text" name="app_search" placeholder="Search applications..." value="<?php echo htmlspecialchars($app_search); ?>" class="filter-search">
+                        <input type="text" name="app_search" placeholder="Search applicants..." value="<?php echo htmlspecialchars($app_search); ?>" class="filter-search">
                         <select name="app_status" class="filter-select">
                             <option value="">All Status</option>
                             <option value="Unread" <?php echo $app_status_filter == 'Unread' ? 'selected' : ''; ?>>Unread</option>
@@ -354,7 +310,7 @@ closeDBConnection($conn);
                     <tbody>
                         <?php if (empty($recent_applications)): ?>
                             <tr>
-                                <td colspan="6" class="text-center">No applications yet</td>
+                                <td colspan="6" class="text-center">No applicants yet</td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($recent_applications as $app): ?>
@@ -381,7 +337,7 @@ closeDBConnection($conn);
                 </table>
             </div>
             <div class="text-right mt-2">
-                <a href="applications/index.php" class="btn btn-link">View All Applications →</a>
+                <a href="applications/index.php" class="btn btn-link">View All Applicants →</a>
             </div>
         </div>
         

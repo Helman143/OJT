@@ -95,7 +95,6 @@ closeDBConnection($conn);
                 </svg>
             </button>
             <nav>
-                <a href="index.php">Job Vacancies</a>
                 <a href="admin/login.php">Admin Login</a>
             </nav>
         </div>
@@ -132,24 +131,11 @@ closeDBConnection($conn);
     </section>
     
     <div class="container">
-        <!-- Breadcrumbs -->
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="index.php">Home</a>
-            <span class="breadcrumb-separator">›</span>
-            <span>Job Vacancies</span>
-        </nav>
-        
         <div class="page-header">
             <div class="page-header-content">
                 <h1>Available Job Vacancies</h1>
                 <p>Apply for positions at the National Commission on Indigenous Peoples (NCIP)</p>
             </div>
-            <?php if ($job_count > 0): ?>
-                <div class="job-count-badge">
-                    <span class="job-count-number"><?php echo $job_count; ?></span>
-                    <span class="job-count-text"><?php echo $job_count == 1 ? 'Available Position' : 'Available Positions'; ?></span>
-                </div>
-            <?php endif; ?>
         </div>
         
         <!-- Enhanced Search and Filter -->
@@ -256,8 +242,12 @@ closeDBConnection($conn);
             <div class="footer-section">
                 <h3>Follow Us</h3>
                 <div class="social-links">
-                    <a href="https://www.facebook.com/NCIPOfficial" target="_blank" aria-label="Facebook" class="social-link">📘 Facebook</a>
-                    <a href="https://twitter.com/NCIPOfficial" target="_blank" aria-label="Twitter" class="social-link">🐦 Twitter</a>
+                    <a href="https://www.facebook.com/NCIPOfficial" target="_blank" aria-label="Facebook" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Facebook
+                    </a>
                 </div>
             </div>
         </div>
